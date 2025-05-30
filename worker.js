@@ -10,6 +10,8 @@ import path from 'path';
 
 dotenv.config();
 
+
+
 const oAuth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
@@ -87,7 +89,10 @@ const worker = new Worker(
               ).catch(err => {
                 console.error('Error sending email:', err);
               });
-            
+              setTimeout(() => {
+                console.log("Video will be deleted in 30 minutes");
+                fs.unlinkSync(outputPath);
+              }, 1000 * 30 * 60);
     
             // Optionally, you can return some result or update the job status
             // return { message: 'Video processing completed', outputFile: `${inputPath}-o.mp4` };
