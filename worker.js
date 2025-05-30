@@ -6,6 +6,7 @@ import fs from 'fs';
 import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 
@@ -59,16 +60,17 @@ const worker = new Worker(
     console.log('Data:', job.data);
 
     const { filename, originalname, email, protocol, host } = job.data;
-    const inputPath = `uploads\\${filename}`;
+    const inputPath = path.join('uploads', filename);
+    const outputPath = path.join('uploads', 'output', filename); 
 
     if(!fs.existsSync(inputPath)) {
         fs.mkdirSync('uploads', { recursive: true });
     }
-    if(!fs.existsSync(`uploads\\output`)) {
-        fs.mkdirSync('uploads\\output', { recursive: true });
+    if(!fs.existsSync(path.join('uploads', 'output'))) {
+        fs.mkdirSync(path.join('uploads', 'output'), { recursive: true });
     }
 
-    exec(`ffmpeg -i ${inputPath} -vcodec libx264 -crf 28 -preset slow -acodec aac -b:a 96k uploads\\output\\${filename}`,
+    exec(`ffmpeg -i ${inputPath} -vcodec libx264 -crf 28 -preset slow -acodec aac -b:a 96k ${outputPath}`,
         (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error processing video: ${error.message}`);
