@@ -41,7 +41,7 @@ async function sendEmail(to, filename, protocol, host) {
       from: 'dhyeypythonemail@gmail.com',
       to: to,
       subject: 'TinyFootage File Processing Completed',
-      text: `Your file has been processed successfully and is ready for download. Check the following link to access your file ${protocol}://${host}}/uploads/output/${filename}`,
+      text: `Your file has been processed successfully and is ready for download. Check the following link to access your file ${protocol}://${host}/uploads/output/${filename}`,
     };
 
     const result = await transporter.sendMail(mailOptions);
